@@ -23,15 +23,16 @@ class Secret:
         '''
         obj_bin = pickle.dumps(obj) # Convert Python objects to binary.
         obj_bin_str = str(obj_bin)
-        encrypted = aes256.encrypt(obj_bin_str, self.__key)
-        return encrypted
+        ciphertext = aes256.encrypt(obj_bin_str, self.__key)
+        return ciphertext
 
-    def decrypt(self, encrypted: str):
+    def decrypt(self, ciphertext: bytes):
         '''
             AES decryption.
+                ciphertext -- The ciphertext is encrypted by encrypt method.
             Return: Python object
         '''
-        decrypted = aes256.decrypt(encrypted, self.__key)
+        decrypted = aes256.decrypt(ciphertext, self.__key)
         # Concatenate the binary of a Python object.
         obj_bin_str_part = decrypted.decode()[2:-1]
         loc = locals()

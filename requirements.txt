@@ -1,0 +1,2 @@
+aes-everywhere==1.2.10
+pycryptodomex==3.13.0

@@ -68,4 +68,8 @@ b'U2FsdGVkX1/WxuK0iagq5jEbJsiIGvuNZieWehVYj7i+M66y06I1WcD7gBpPKniDhIkmSuVepFdMEi
 
 In addition to Python dictionaries, you can encrypt your own objects, and the encrypted binary can be stored in a database or used for TCP communication.
 
+If this module was helpful to you, I hope to receive your GitHub Star! Thank you so much!
+
+[GitHub](https://github.com/Cyberbolt/obj_encrypt)
+
 [CyberLight](https://www.cyberlight.xyz/)

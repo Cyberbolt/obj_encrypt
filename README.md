@@ -1,5 +1,7 @@
 # obj_encrypt
 
+[Chinese Version](https://github.com/Cyberbolt/obj_encrypt/blob/main/README_CHN.md)
+
 obj-encrypt is an encryption library based on the AES-256 algorithm. It uses Python objects as the basic unit, which can convert objects into binary ciphertext and support decryption. Objects encrypted with obj-encrypt support TCP communication, database storage, and more.
 
 
@@ -65,3 +67,5 @@ b'U2FsdGVkX1/WxuK0iagq5jEbJsiIGvuNZieWehVYj7i+M66y06I1WcD7gBpPKniDhIkmSuVepFdMEi
 ```
 
 In addition to Python dictionaries, you can encrypt your own objects, and the encrypted binary can be stored in a database or used for TCP communication.
+
+[CyberLight](https://www.cyberlight.xyz/)

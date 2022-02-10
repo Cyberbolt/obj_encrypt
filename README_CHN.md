@@ -65,3 +65,5 @@ b'U2FsdGVkX1/WxuK0iagq5jEbJsiIGvuNZieWehVYj7i+M66y06I1WcD7gBpPKniDhIkmSuVepFdMEi
 ```
 
 除了字典，你可以加密自己的对象，加密后的二进制可以存入数据库，也可以用于 TCP 通信。
+
+[电光笔记官网](https://www.cyberlight.xyz/)

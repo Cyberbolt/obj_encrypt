@@ -2,17 +2,18 @@ from obj_encrypt import Secret
 
 
 def main():
-    secret = Secret(key='0123456789') # 初始化 secret 实例，密钥最大不能超过 32 个字符串
-    # 构建 data 字典
+    # Initialize the secret instance, the key is an AES-256 key, and the maximum size cannot exceed 32 strings.
+    secret = Secret(key='0123456789')
+    # build the data dictionary
     data = {
         'author': 'Cyberbolt',
         'personal_website': 'https://www.cyberlight.xyz/',
-        'time': '2021-02-10'
+        'time': '2022-02-10'
     }
-    ciphertext = secret.encrypt(data) # 将对象转为二进制密文，获取密文
+    ciphertext = secret.encrypt(data) # Convert the object to binary ciphertext and get the ciphertext.
     print(ciphertext, ' ', type(ciphertext))
-    data = secret.decrypt(ciphertext) # 解密密文为对象
-    print(data)
+    plaintext = secret.decrypt(ciphertext) # Decrypt ciphertext as object.
+    print(plaintext)
 
 
 if __name__ == '__main__':

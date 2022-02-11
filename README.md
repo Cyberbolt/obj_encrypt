@@ -42,17 +42,18 @@ from obj_encrypt import Secret
 
 
 def main():
-    secret = Secret(key='0123456789') # Initialize the secret instance, the key cannot exceed 32 strings.
-    # Build the data dictionary.
+    # Initialize the secret instance, the key is an AES-256 key, and the maximum size cannot exceed 32 strings.
+    secret = Secret(key='0123456789')
+    # build the data dictionary
     data = {
         'author': 'Cyberbolt',
         'personal_website': 'https://www.cyberlight.xyz/',
-        'time': '2021-02-10'
+        'time': '2022-02-10'
     }
     ciphertext = secret.encrypt(data) # Convert the object to binary ciphertext and get the ciphertext.
     print(ciphertext, ' ', type(ciphertext))
-    data = secret.decrypt(ciphertext) # Decrypt ciphertext as object.
-    print(data)
+    plaintext = secret.decrypt(ciphertext) # Decrypt ciphertext as object.
+    print(plaintext)
 
 
 if __name__ == '__main__':
@@ -62,8 +63,8 @@ if __name__ == '__main__':
 Output
 
 ```
-b'U2FsdGVkX1/WxuK0iagq5jEbJsiIGvuNZieWehVYj7i+M66y06I1WcD7gBpPKniDhIkmSuVepFdMEisT8/+HqrWHHNwoY+waDERTes+7dGHvMBc4FcuTFjMzVoQZUE0SqFMi/ORhKcpCGgSUZo/gdNBPh0nNsRZ5ZQrKbt47aw6tSOEEXHwXEr20uHjqT7wx1uvsXnGbx1l91BNhEYrAIxhaJX0YTfGOgqVgCMc9k4xxSNEoB9v19873rryT5TnTXijNeA+FRtZKN5Mt9WUFMuBYCK5xWhXKv0BJOn8iGmw='   <class 'bytes'>
-{'author': 'Cyberbolt', 'personal_website': 'https://www.cyberlight.xyz/', 'time': '2021-02-10'}
+b'U2FsdGVkX18IANYgINODlF8BjkxI3AaKJ/+10Iexgh65qyEKFY21HK5LSjiTuy37arjYAuIQQls+amqCdEdVdy0V1E6xECJXOFBb0kfIzQuxOimOaFFVvtq4IntjJNdCHLiTwuExVfwAW7CjqaD554B71IoT0o9xqrFch3N0vtq+UP0uXyMmMCsvu8zY7vrCuw9qM+kOW2VWsC2c2ePDnofvakchgDW9bGF8fTC3prE+TPksoJ4l6ERCjjRid54gP6+HmzB+TwOVSGaj+4VIdm1g7qv591tBU1U6Lxm83Hk='   <class 'bytes'>
+{'author': 'Cyberbolt', 'personal_website': 'https://www.cyberlight.xyz/', 'time': '2022-02-10'}
 ```
 
 In addition to Python dictionaries, you can encrypt your own objects, and the encrypted binary can be stored in a database or used for TCP communication.

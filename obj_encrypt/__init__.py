@@ -36,7 +36,7 @@ class Secret:
         # Concatenate the binary of a Python object.
         obj_bin_str_part = decrypted.decode()[2:-1]
         loc = locals()
-        exec("obj_bin = b'{}'".format(obj_bin_str_part))
+        exec("obj_bin = b'''{}''' ".format(obj_bin_str_part))
         obj_bin = loc['obj_bin']
         # Convert the binary to a Python object.
         obj = pickle.loads(obj_bin)

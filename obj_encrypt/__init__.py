@@ -27,8 +27,8 @@ class Signature:
         '''
         if type(salt) != type(b'1'):
             raise RuntimeError('Salt must be bytes.')
-        self._salt = salt
-        self._iterations = iterations
+        self.salt = salt
+        self.iterations = iterations
 
     def encrypt(self, content: bytes):
         '''
@@ -36,7 +36,7 @@ class Signature:
         '''
         if type(content) != type(b'1'):
             raise RuntimeError('Content must be bytes.')
-        dk = hashlib.pbkdf2_hmac('sha256', content, self._salt, self._iterations)
+        dk = hashlib.pbkdf2_hmac('sha256', content, self.salt, self.iterations)
         return dk.hex()
 
 
@@ -49,13 +49,13 @@ class Secret:
         if len(key) > KEY_LEN:
             raise RuntimeError('The key cannot contain more than 32 characters.')
         
-        self.__key = key
+        self.key = key
         # Less than 32 characters complement 0.
         for i in range(KEY_LEN - len(key)):
-            self.__key += '0'
+            self.key += '0'
         
         # Used for SHA 256 signatures.
-        key_bin = self.__key.encode()
+        key_bin = self.key.encode()
         self.signature = Signature(salt=key_bin)
         self.__iv = self.signature.encrypt(key_bin)[:IV_LEN]
 
@@ -66,7 +66,7 @@ class Secret:
         '''
         obj_bin = pickle.dumps(obj) # Convert Python objects to binary.
         obj_bin_str = str(obj_bin)
-        ciphertext = aes256.encrypt(obj_bin_str, self.__key)
+        ciphertext = aes256.encrypt(obj_bin_str, self.key)
         return ciphertext
 
     def decrypt_old(self, ciphertext: bytes):
@@ -75,7 +75,7 @@ class Secret:
                 ciphertext -- The ciphertext is encrypted by encrypt method.
             Return: Python object
         '''
-        decrypted = aes256.decrypt(ciphertext, self.__key)
+        decrypted = aes256.decrypt(ciphertext, self.key)
         # Concatenate the binary of a Python object.
         obj_bin_str_part = decrypted.decode()[2:-1]
         loc = locals()
@@ -86,7 +86,7 @@ class Secret:
         return obj
 
     def encrypt(self, obj) -> bytes:
-        aes = AES.new(self.__key, AES.MODE_CBC, self.__iv)
+        aes = AES.new(self.key, AES.MODE_CBC, self.__iv)
         
         # Convert Python objects to binary.
         obj_bin = pickle.dumps(obj)
@@ -101,7 +101,7 @@ class Secret:
         return ciphertext
     
     def decrypt(self, ciphertext: bytes):
-        aes = AES.new(self.__key, AES.MODE_CBC, self.__iv)
+        aes = AES.new(self.key, AES.MODE_CBC, self.__iv)
         
         obj_str = aes.decrypt(ciphertext).decode()
         

@@ -1,3 +1,1 @@
-aes-everywhere==1.2.10
-pycrypto==2.6.1
-pycryptodomex==3.13.0
+pycrypto>=2.6.1

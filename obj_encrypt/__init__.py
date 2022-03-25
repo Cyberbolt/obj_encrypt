@@ -1,10 +1,6 @@
-import sys
-import base64
 import pickle
 
 from Crypto.Cipher import AES
-from Crypto import Random
-from AesEverywhere import aes256
 
 
 import hashlib
@@ -58,32 +54,6 @@ class Secret:
         key_bin = self.key.encode()
         self.signature = Signature(salt=key_bin)
         self.__iv = self.signature.encrypt(key_bin)[:IV_LEN]
-
-    def encrypt_old(self, obj) -> bytes:
-        '''
-            Encrypt Python objects using AES.
-                obj -- Most Python objects.
-        '''
-        obj_bin = pickle.dumps(obj) # Convert Python objects to binary.
-        obj_bin_str = str(obj_bin)
-        ciphertext = aes256.encrypt(obj_bin_str, self.key)
-        return ciphertext
-
-    def decrypt_old(self, ciphertext: bytes):
-        '''
-            AES decryption.
-                ciphertext -- The ciphertext is encrypted by encrypt method.
-            Return: Python object
-        '''
-        decrypted = aes256.decrypt(ciphertext, self.key)
-        # Concatenate the binary of a Python object.
-        obj_bin_str_part = decrypted.decode()[2:-1]
-        loc = locals()
-        exec("obj_bin = b'''{}''' ".format(obj_bin_str_part))
-        obj_bin = loc['obj_bin']
-        # Convert the binary to a Python object.
-        obj = pickle.loads(obj_bin)
-        return obj
 
     def encrypt(self, obj) -> bytes:
         aes = AES.new(self.key, AES.MODE_CBC, self.__iv)

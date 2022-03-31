@@ -1,6 +1,7 @@
 import pickle
 
 from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
 
 
 import hashlib
@@ -60,10 +61,7 @@ class Secret:
         
         # Convert Python objects to binary.
         obj_bin = pickle.dumps(obj)
-        
-        # The padding bytes size is a multiple of 16B.
-        for i in range(16 - len(obj_bin) % BLOCK_SIZE):
-            obj_bin += b' '
+        obj_bin = pad(obj_bin, BLOCK_SIZE)
 
         ciphertext = aes.encrypt(obj_bin)
         return ciphertext
@@ -72,9 +70,10 @@ class Secret:
         aes = AES.new(self.key_bin, AES.MODE_CBC, self.__iv.encode())
         
         obj_bin = aes.decrypt(ciphertext)
-        
-        # Unpack the bytes padding.
-        obj_bin = obj_bin.rstrip(b' ')
+        try:
+            obj_bin = unpad(obj_bin, BLOCK_SIZE)
+        except (ValueError, KeyError):
+            raise KeyError('Incorrect key.')
         
         # Convert binary to Python object.
         obj = pickle.loads(obj_bin) 

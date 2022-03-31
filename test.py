@@ -20,6 +20,8 @@ def main():
     
     print(ciphertext, ' ', type(ciphertext))
     start2 = time.time()
+    
+    # secret = Secret(key='01234567892')
     plaintext = secret.decrypt(ciphertext) # Decrypt ciphertext as object.
     end2 = time.time()
     print(plaintext)

@@ -51,59 +51,31 @@ class Secret:
             self.key += '0'
         
         # Used for SHA 256 signatures.
-        key_bin = self.key.encode()
-        self.signature = Signature(salt=key_bin)
-        self.__iv = self.signature.encrypt(key_bin)[:IV_LEN]
+        self.key_bin = self.key.encode()
+        self.signature = Signature(salt=self.key_bin)
+        self.__iv = self.signature.encrypt(self.key_bin)[:IV_LEN]
 
     def encrypt(self, obj) -> bytes:
-        aes = AES.new(self.key, AES.MODE_CBC, self.__iv)
+        aes = AES.new(self.key_bin, AES.MODE_CBC, self.__iv.encode())
         
         # Convert Python objects to binary.
         obj_bin = pickle.dumps(obj)
-        # Get binary string.
-        obj_str = obj_bin.hex()
         
-        # The padding string size is a multiple of 16B.
-        for i in range(16 - len(obj_str) % BLOCK_SIZE):
-            obj_str += ' '
+        # The padding bytes size is a multiple of 16B.
+        for i in range(16 - len(obj_bin) % BLOCK_SIZE):
+            obj_bin += b' '
 
-        ciphertext = aes.encrypt(obj_str)
+        ciphertext = aes.encrypt(obj_bin)
         return ciphertext
     
     def decrypt(self, ciphertext: bytes):
-        aes = AES.new(self.key, AES.MODE_CBC, self.__iv)
+        aes = AES.new(self.key_bin, AES.MODE_CBC, self.__iv.encode())
         
-        obj_str = aes.decrypt(ciphertext).decode()
+        obj_bin = aes.decrypt(ciphertext)
         
-        # Unpack the string padding.
-        obj_str = obj_str.rstrip(' ')
+        # Unpack the bytes padding.
+        obj_bin = obj_bin.rstrip(b' ')
         
-        # Convert the string to its original binary.
-        obj_bin = bytes.fromhex(obj_str)
         # Convert binary to Python object.
         obj = pickle.loads(obj_bin) 
         return obj
-    
-
-def pkcs7_padding(s):
-    """
-    Padding to blocksize according to PKCS #7
-    calculates the number of missing chars to BLOCK_SIZE and pads with
-    ord(number of missing chars)
-    @see: http://www.di-mgt.com.au/cryptopad.html
-    @param s: string Text to pad
-    @type s: string
-    @rtype: string
-    """
-    s_len = s.encode('utf-8')
-    s = s + (BLOCK_SIZE - s_len % BLOCK_SIZE) * chr(BLOCK_SIZE - s_len % BLOCK_SIZE)
-    return bytes(s, 'utf-8')
-
-def pkcs7_trimming(s):
-    """
-    Trimming according to PKCS #7
-    @param s: string Text to unpad
-    @type s: string
-    @rtype: string
-    """
-    return s[0:-s[-1]]

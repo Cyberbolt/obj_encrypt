@@ -67,10 +67,9 @@ class Secret:
         return ciphertext
     
     def decrypt(self, ciphertext: bytes):
-        aes = AES.new(self.key_bin, AES.MODE_CBC, self.__iv.encode())
-        
-        obj_bin = aes.decrypt(ciphertext)
         try:
+            aes = AES.new(self.key_bin, AES.MODE_CBC, self.__iv.encode())
+            obj_bin = aes.decrypt(ciphertext)
             obj_bin = unpad(obj_bin, BLOCK_SIZE)
         except (ValueError, KeyError):
             raise KeyError('Incorrect key.')

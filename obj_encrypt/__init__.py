@@ -41,18 +41,20 @@ class Secret:
 
     def __init__(self, key: str=''):
         # A 256 bit (32 byte) key
-        if type(key) != type(''):
+        if type(key) != str:
             raise RuntimeError('The key must be a string.')
-        if len(key) > KEY_LEN:
-            raise RuntimeError('The key cannot contain more than 32 characters.')
         
         self.key = key
+        self.key_bin = self.key.encode()
+        
+        if len(self.key_bin) > KEY_LEN:
+            raise RuntimeError('The key size cannot exceed 256 bits.')
+        
         # Less than 32 characters complement 0.
         for i in range(KEY_LEN - len(key)):
-            self.key += '0'
+            self.key_bin += b'0'
         
         # Used for SHA 256 signatures.
-        self.key_bin = self.key.encode()
         self.signature = Signature(salt=self.key_bin)
         self.__iv = self.signature.encrypt(self.key_bin)[:IV_LEN]
 

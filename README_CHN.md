@@ -1,6 +1,6 @@
 # obj_encrypt
 
-obj-encrypt 是基于 AES-256-CBC 算法的加密库，它以 Python 对象为基本单元，可以将对象转为二进制密文，并支持解密。经 obj-encrypt 加密的对象支持 TCP 通信、数据库存储等。
+obj-encrypt 是基于 AES-256-GCM 算法的加密库，它以 Python 对象为基本单元，可以将对象转为二进制密文，并支持解密。经 obj-encrypt 加密的对象支持 TCP 通信、数据库存储等。
 
 
 ### 安装方法

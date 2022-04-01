@@ -56,23 +56,21 @@ class Secret:
         
         # Used for SHA 256 signatures.
         self.signature = Signature(salt=self.key_bin)
-        self.__iv = self.signature.encrypt(self.key_bin)[:IV_LEN]
+        self._iv = self.signature.encrypt(self.key_bin)[:IV_LEN].encode()
 
     def encrypt(self, obj) -> bytes:
-        aes = AES.new(self.key_bin, AES.MODE_CBC, self.__iv.encode())
+        aes = AES.new(self.key_bin, AES.MODE_GCM, nonce=self._iv)
         
         # Convert Python objects to binary.
         obj_bin = pickle.dumps(obj)
-        obj_bin = pad(obj_bin, BLOCK_SIZE)
 
         ciphertext = aes.encrypt(obj_bin)
         return ciphertext
     
     def decrypt(self, ciphertext: bytes):
         try:
-            aes = AES.new(self.key_bin, AES.MODE_CBC, self.__iv.encode())
+            aes = AES.new(self.key_bin, AES.MODE_GCM, nonce=self._iv)
             obj_bin = aes.decrypt(ciphertext)
-            obj_bin = unpad(obj_bin, BLOCK_SIZE)
         except (ValueError, KeyError):
             raise KeyError('Incorrect key.')
         

@@ -2,7 +2,7 @@
 
 [Chinese Version](https://github.com/Cyberbolt/obj_encrypt/blob/main/README_CHN.md)
 
-obj-encrypt is an encryption library based on the 'AES-256-CBC' algorithm. It uses Python objects as the basic unit and it can convert objects into binary 'ciphertext' and support decryption. Objects encrypted with obj-encrypt support TCP communication, database storage, and more.
+obj-encrypt is an encryption library based on the 'AES-256-GCM' algorithm. It uses Python objects as the basic unit and it can convert objects into binary 'ciphertext' and support decryption. Objects encrypted with obj-encrypt support TCP communication, database storage, and more.
 
 
 ### Installation
